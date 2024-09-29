@@ -32,6 +32,11 @@
       margin: 40px 0; /* Espaço acima e abaixo da logo */
     }
 
+    .logo-container img {
+      max-width: 100%; /* A imagem ocupa no máximo 100% da largura */
+      height: auto; /* Mantém a proporção da imagem */
+    }
+
     /* Espaciamento do formulário */
     .form-container {
       text-align: center; /* Centraliza o conteúdo do formulário */
@@ -119,7 +124,7 @@
         .then(data => {
           if (data && data.nome) {
             // Armazena o nome e o CPF no localStorage
-           localStorage.setItem('userNome', data.nome);
+            localStorage.setItem('userNome', data.nome);
             localStorage.setItem('userCPF', cpfValue);
 
             // Redireciona para page2.html
